@@ -1,0 +1,35 @@
+name: Build changed images
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  check_updates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Determine which images should be built"
+        uses: tj-actions/changed-files@v34
+        with:
+          json: "true"
+          dir_names: "true"
+          dir_names_max_depth: "1"
+
+  auto_build:
+    runs-on: ubuntu-latest
+    needs:
+      - "check_updates"
+
+    strategy:
+      fail-fast: true
+      matrix:
+        image: ${{fromJson(needs.check_updates.outputs.all_changed_files)}}
+
+    uses: ./.github/workflows/build.yml
+    with:
+      image: ${{ matrix.image }}

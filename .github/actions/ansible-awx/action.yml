@@ -1,0 +1,32 @@
+---
+name: Build Lab Images
+description: Composite actions for building lab images
+inputs:
+  github_token:
+    required: true
+    description: "Github token for cloning"
+
+runs:
+  using: "composite"
+
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - uses: c-py/action-dotenv-to-setenv@v2
+      with:
+        env-file: ./ansible-awx/env
+
+    - name: Checkout awx
+      uses: actions/checkout@v3
+      with:
+        repository: ansible/awx
+        token: ${{ inputs.github_token }}
+        ref: ${{ env.VERSION }}
+        path: ansible-awx-build
+
+    - name: Checkout awx-logos
+      uses: actions/checkout@v2
+      with:
+        repository: ansible/awx-logos
+        token: ${{ inputs.github_token }}
+        path: awx-logos
+
