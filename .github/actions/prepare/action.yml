@@ -76,5 +76,7 @@ runs:
       uses: docker/metadata-action@v4
       with:
         images: ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME }}
-        tags: ${{ env.VERSION }}
+        tags: |
+          ${{ env.VERSION }}
+          latest
 
