@@ -20,6 +20,7 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           image: ansible-awx
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout awx
         uses: actions/checkout@v3

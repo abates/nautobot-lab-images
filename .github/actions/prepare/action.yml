@@ -5,6 +5,10 @@ inputs:
     description: 'Base Directory of image to build'
     required: true
     type: string
+  github_token:
+    description: 'Github token for logging into container registry'
+    required: true
+    type: string
 
 runs:
   using: "composite"
@@ -54,7 +58,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.github_token }}
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
