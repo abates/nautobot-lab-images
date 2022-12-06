@@ -3,7 +3,6 @@ import socket
 
 GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/nautobot-labs-awx-ee:latest'}]
 CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/abates/ansible-awx-ee:latest'
-CLUSTER_HOST_ID = 'awx-localhost'
 
 ADMINS = ()
 STATIC_ROOT = '/var/lib/awx/public/static'
@@ -23,7 +22,7 @@ AWX_PROOT_ENABLED = False
 # Automatically deprovision pods that go offline
 AWX_AUTO_DEPROVISION_INSTANCES = True
 
-CLUSTER_HOST_ID = socket.gethostname()
+CLUSTER_HOST_ID = 'awx-localhost'
 SYSTEM_UUID = os.environ.get('MY_POD_UID', '00000000-0000-0000-0000-000000000000')
 
 CSRF_COOKIE_SECURE = False
