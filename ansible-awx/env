@@ -1,12 +1,5 @@
 VERSION=21.9.0
 IMAGE_NAME=ansible-awx
-
-BUILD_ARG_1=VERSION=$VERSION
-BUILD_ARG_2=SETUPTOOLS_SCM_PRETEND_VERSION=$VERSION
-BUILD_ARG_3=HEADLESS=False
-
-PRE_BUILD="ansible-playbook -v tools/ansible/build.yml -e awx_image=$IMAGE_NAME -e awx_version=$VERSION -e ansible_python_interpreter=$(which python3) -e push=no -e awx_official=yes"
-
 PYTHON_VERSION=3.9
 BUILD_CONTEXT=ansible-awx-build
 AWX_IMAGE=local/awx
