@@ -20,7 +20,6 @@ jobs:
           json: "true"
           dir_names: "true"
           dir_names_max_depth: "1"
-              outputs:
     outputs:
       changed_images: ${{ steps.changed_files.outputs.all_changed_files }}
 
