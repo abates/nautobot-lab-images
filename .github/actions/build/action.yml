@@ -1,0 +1,32 @@
+name: Prepare
+description: prep the environment for building
+inputs:
+  image:
+    description: 'Base Directory of image to build'
+    required: true
+    type: string
+  github_token:
+    description: 'Github token for logging into container registry'
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - uses: ./.github/actions/prepare
+      id: prep
+      with:
+        image: ${{ inputs.image }}
+        github_token: ${{ inputs.github_token }}
+
+    - name: Build and publish image
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        context: ./${{ env.BUILD_CONTEXT || inputs.image }}
+        tags: ${{ steps.prep.outputs.tags }}
+        labels: ${{ steps.prep.outputs.labels }}
+        platforms: linux/arm64,linux/amd64
+
