@@ -2,4 +2,3 @@ VERSION=21.9.0
 IMAGE_NAME=ansible-awx
 PYTHON_VERSION=3.9
 BUILD_CONTEXT=ansible-awx-build
-AWX_IMAGE=local/awx
