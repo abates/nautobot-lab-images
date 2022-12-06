@@ -1,18 +1,16 @@
 import os
 import socket
 
+GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/nautobot-labs-awx-ee:latest'}]
+
 ADMINS = ()
 STATIC_ROOT = '/var/lib/awx/public/static'
 PROJECTS_ROOT = '/var/lib/awx/projects'
 JOBOUTPUT_ROOT = '/var/lib/awx/job_status'
 
-#IS_K8S = True
-
 SECRET_KEY = "MbADUwynaTnmODjtCosz"
 
 ALLOWED_HOSTS = ['*']
-
-#INTERNAL_API_URL = 'http://127.0.0.1:8013'
 
 # Sets Ansible Collection path
 AWX_ANSIBLE_COLLECTIONS_PATHS = '/var/lib/awx/vendor/awx_ansible_collections'
