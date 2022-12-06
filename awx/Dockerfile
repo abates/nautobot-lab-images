@@ -1,5 +1,5 @@
 ARG VERSION
-FROM local/ansible-awx:${VERSION}
+FROM ghcr.io/abates/ansible-awx:${VERSION}
 
 USER root
 RUN yum -y update && \
