@@ -1,0 +1,43 @@
+---
+name: Build ansible-awx docker images
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+    paths: ansible-awx-ee/**
+
+  workflow_dispatch:
+
+jobs:
+  build_ansible_awx:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/prepare
+        id: prep
+        with:
+          image: ansible-awx
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout awx-ee
+        uses: actions/checkout@v3
+        with:
+          repository: ansible/awx-ee
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ env.VERSION }}
+          path: ansible-awx-ee-build
+
+      - name: Build and publish image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: ./${{ env.BUILD_CONTEXT || inputs.image }}
+          tags: ${{ steps.prep.outputs.tags }}
+          labels: ${{ steps.prep.outputs.labels }}
+          platforms: linux/arm64,linux/amd64
+          build-args: |
+            VERSION=${{ env.VERSION }}
