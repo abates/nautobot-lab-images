@@ -31,6 +31,7 @@ runs:
         files: ./${{ inputs.image }}/requirements.txt
 
     - name: Install python requirements
+      shell: bash
       run: pip install -r ./${{ inputs.image }}/requirements.txt
       if: steps.requirements_txt.outputs.files_exists == 'true'
 
@@ -40,6 +41,7 @@ runs:
         files: ./${{ inputs.image }}/pre_build.sh
 
     - name: Run pre-build script
+      shell: bash
       run: ./${{ inputs.image }}/pre_build.sh
       if: steps.pre_build.outputs.files_exists == 'true'
 
