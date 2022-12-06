@@ -17,10 +17,13 @@ jobs:
         id: changed_files
         uses: tj-actions/changed-files@v34
         with:
+          # this prevents the inclusion of 'hidden' files
+          # starting with a dot
+          files: "*"
           json: "true"
           dir_names: "true"
           dir_names_max_depth: "1"
-      - run: echo '${{ toJSON(steps.changed_files.outputs) }}'
+      - run: echo ${{ toJSON(steps.changed_files.outputs) }}
     outputs:
       changed_images: ${{ steps.changed_files.outputs.all_changed_files }}
 
