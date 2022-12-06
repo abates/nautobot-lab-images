@@ -38,7 +38,7 @@ jobs:
           path: awx-logos
 
       - name: Build AWX
-        working-directory: ansible-awx
+        working-directory: ansible-awx-build
         env:
           ANSIBLE_STDOUT_CALLBACK: debug
         run: |
