@@ -11,13 +11,12 @@ inputs:
     type: string
 
 outputs:
-  image:
-    tags:
-      description: "Container tags for pushing to registry"
-      value: ${{ steps.meta.outputs.tags }}
-    labels:
-      description: "Container labels for pushing to registry"
-      value: ${{ steps.meta.outputs.labels }}
+  tags:
+    description: "Container tags for pushing to registry"
+    value: ${{ steps.meta.outputs.tags }}
+  labels:
+    description: "Container labels for pushing to registry"
+    value: ${{ steps.meta.outputs.labels }}
 
 
 runs:
