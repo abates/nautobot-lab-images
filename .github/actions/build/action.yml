@@ -29,6 +29,6 @@ runs:
         tags: ${{ steps.prep.outputs.tags }}
         labels: ${{ steps.prep.outputs.labels }}
         platforms: linux/arm64,linux/amd64
-        build_args: |
+        build-args: |
           VERSION: ${{ env.VERSION }}
 
