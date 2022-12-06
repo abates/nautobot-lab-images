@@ -30,5 +30,5 @@ runs:
         labels: ${{ steps.prep.outputs.labels }}
         platforms: linux/arm64,linux/amd64
         build-args: |
-          VERSION: ${{ env.VERSION }}
+          VERSION=${{ env.VERSION }}
 
