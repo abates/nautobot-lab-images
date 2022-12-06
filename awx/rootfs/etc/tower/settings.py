@@ -3,6 +3,7 @@ import socket
 
 GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/nautobot-labs-awx-ee:latest'}]
 CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/abates/ansible-awx-ee:latest'
+CLUSTER_HOST_ID = 'awx-localhost'
 
 ADMINS = ()
 STATIC_ROOT = '/var/lib/awx/public/static'
