@@ -1,5 +1,5 @@
 ---
-name: Build ansible-awx docker images
+name: Build ansible-awx-ee docker images
 
 # Controls when the workflow will run
 on:
@@ -20,7 +20,7 @@ jobs:
       - uses: ./.github/actions/prepare
         id: prep
         with:
-          image: ansible-awx
+          image: ansible-awx-ee
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout awx-ee
