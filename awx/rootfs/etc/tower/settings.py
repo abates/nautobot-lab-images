@@ -1,7 +1,7 @@
 import os
 import socket
 
-GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/nautobot-labs-awx-ee:latest'}]
+GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/ansible-awx-ee:latest'}]
 CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/abates/ansible-awx-ee:latest'
 
 ADMINS = ()
