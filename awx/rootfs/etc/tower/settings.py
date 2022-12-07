@@ -3,6 +3,7 @@ import socket
 
 GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Nautobot Labs AWX EE (latest)', 'image': 'ghcr.io/abates/ansible-awx-ee:latest'}]
 CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/abates/ansible-awx-ee:latest'
+DEFAULT_CONTAINER_RUN_OPTIONS = ['--network', 'slirp4netns:enable_ipv6=false']
 
 ADMINS = ()
 STATIC_ROOT = '/var/lib/awx/public/static'
