@@ -8,9 +8,12 @@ if output=$(awx-manage createsuperuser --noinput --username=awx --email=awx@loca
     echo $output
 fi
 
-awx-manage create_preload_data
 awx-manage register_default_execution_environments
 
 awx-manage provision_instance --hostname="awx-localhost" --node_type="hybrid"
 awx-manage register_queue --queuename=controlplane --instance_percent=100
 awx-manage register_queue --queuename=default --instance_percent=100
+
+if [ $ANSIBLE_TOWER_SAMPLES == "true" ] ; then
+  awx-manage create_preload_data
+fi
