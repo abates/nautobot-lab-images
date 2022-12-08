@@ -39,44 +39,12 @@ EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 
-LOGGING['handlers']['console'] = {
-    '()': 'logging.StreamHandler',
-    'level': 'INFO',
-    'formatter': 'simple',
-    'filters': ['guid'],
-}
-
-LOGGING['loggers']['django.request']['handlers'] = ['console']
-LOGGING['loggers']['rest_framework.request']['handlers'] = ['console']
-LOGGING['loggers']['awx']['handlers'] = ['console', 'external_logger']
-LOGGING['loggers']['awx.main.commands.run_callback_receiver']['handlers'] = ['console']
-LOGGING['loggers']['awx.main.tasks']['handlers'] = ['console', 'external_logger']
-LOGGING['loggers']['awx.main.scheduler']['handlers'] = ['console', 'external_logger']
-LOGGING['loggers']['django_auth_ldap']['handlers'] = ['console']
-LOGGING['loggers']['social']['handlers'] = ['console']
-LOGGING['loggers']['system_tracking_migrations']['handlers'] = ['console']
-LOGGING['loggers']['rbac_migrations']['handlers'] = ['console']
-LOGGING['handlers']['callback_receiver'] = {'class': 'logging.NullHandler'}
-LOGGING['handlers']['task_system'] = {'class': 'logging.NullHandler'}
-LOGGING['handlers']['tower_warnings'] = {'class': 'logging.NullHandler'}
-LOGGING['handlers']['rbac_migrations'] = {'class': 'logging.NullHandler'}
-LOGGING['handlers']['system_tracking_migrations'] = {'class': 'logging.NullHandler'}
-LOGGING['handlers']['management_playbooks'] = {'class': 'logging.NullHandler'}
-
 USE_X_FORWARDED_PORT = True
 BROADCAST_WEBSOCKET_PORT = 8052
 BROADCAST_WEBSOCKET_PROTOCOL = 'http'
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("awx-redis", 6379)],
-        },
-    },
-}
-
 BROKER_URL="redis://awx-redis:6379/"
+
 DATABASES = {
     'default': {
         'ATOMIC_REQUESTS': True,
