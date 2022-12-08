@@ -10,7 +10,7 @@ STATIC_ROOT = '/var/lib/awx/public/static'
 PROJECTS_ROOT = '/var/lib/awx/projects'
 JOBOUTPUT_ROOT = '/var/lib/awx/job_status'
 
-SECRET_KEY = "MbADUwynaTnmODjtCosz"
+SECRET_KEY = 'MbADUwynaTnmODjtCosz'
 
 ALLOWED_HOSTS = ['*']
 
@@ -43,17 +43,18 @@ USE_X_FORWARDED_PORT = True
 BROADCAST_WEBSOCKET_PORT = 8052
 BROADCAST_WEBSOCKET_PROTOCOL = 'http'
 
-BROKER_URL="redis://awx-redis:6379/"
+BROKER_URL='redis://awx-redis:6379/'
+CHANNEL_LAYERS['default']['CONFIG']['hosts'] = [BROKER_URL]
 
 DATABASES = {
     'default': {
         'ATOMIC_REQUESTS': True,
         'ENGINE': 'awx.main.db.profiled_pg',
-        'NAME': "awx",
-        'USER': "awx",
-        'PASSWORD': "shuOKNHPUwtxdxjNjMoZ",
-        'HOST': "awx-db",
-        'PORT': "5432",
+        'NAME': 'awx',
+        'USER': 'awx',
+        'PASSWORD': 'shuOKNHPUwtxdxjNjMoZ',
+        'HOST': 'awx-db',
+        'PORT': '5432',
     }
 }
 
