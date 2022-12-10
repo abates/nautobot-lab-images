@@ -4,7 +4,7 @@ set +x
 function run_script() {
   file=$1
   if [ -d $file ] ; then
-    for file in $dir/* ; do
+    for file in $file/* ; do
       run_script $file
     done
   elif [ -f $file ] ; then
@@ -38,7 +38,7 @@ awx-manage provision_instance --hostname="awx-localhost" --node_type="hybrid"
 awx-manage register_queue --queuename=controlplane --instance_percent=100
 awx-manage register_queue --queuename=default --instance_percent=100
 
-if [ $ANSIBLE_TOWER_SAMPLES == "true" ] ; then
+if [ "$ANSIBLE_TOWER_SAMPLES" = "true" ] ; then
   awx-manage create_preload_data
 fi
 
