@@ -8,6 +8,7 @@ function run_script() {
       run_script $file
     done
   elif [ -f $file ] ; then
+    echo "Running configuration script $file"
     $file
   fi
 }
