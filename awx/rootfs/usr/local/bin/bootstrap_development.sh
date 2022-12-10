@@ -1,11 +1,34 @@
 #!/bin/bash
 set +x
 
+function run_script() {
+  file=$1
+  if [ -d $file ] ; then
+    for file in $dir/* ; do
+      run_script $file
+    done
+  elif [ -f $file ] ; then
+    $file
+  fi
+}
+
+function load_fixture() {
+  fixture=$1
+  if [ -d $fixture ] ; then
+    for fixture in $fixture/* ; do
+      load_fixture $fixture
+    done
+  elif [ -f $fixture ] ; then
+      echo -n "Loading fixture $fixture: "
+      awx-manage loaddata $fixture
+  fi
+}
+
 awx-manage migrate
 
-export DJANGO_SUPERUSER_PASSWORD=awx
-if output=$(awx-manage createsuperuser --noinput --username=awx --email=awx@localhost 2> /dev/null); then
-    echo $output
+if [ -n $TOWER_USERNAME ] && [ -n $TOWER_PASSWORD ]; then
+  export DJANGO_SUPERUSER_PASSWORD=$TOWER_PASSWORD
+  awx-manage createsuperuser --noinput --username=$TOWER_USERNAME --email=$TOWER_USERNAME@localhost 2> /dev/null
 fi
 
 awx-manage register_default_execution_environments
@@ -19,12 +42,7 @@ if [ $ANSIBLE_TOWER_SAMPLES == "true" ] ; then
 fi
 
 # Load any fixtures
-AWX_FIXTURES=/opt/awx/fixtures
-if [ -d $AWX_FIXTURES ] ; then
-  for FIXTURE_DIR in `ls $AWX_FIXTURES` ; do
-    for fixture in `ls $AWX_FIXTURES/$FIXTURE_DIR` ; do
-      echo -n "Loading fixture $AWX_FIXTURES/$FIXTURE_DIR/$fixture: "
-      awx-manage loaddata $AWX_FIXTURES/$FIXTURE_DIR/$fixtur
-    done
-  done
-fi
+load_fixture /opt/awx/fixtures
+
+# Run configuration scripts
+run_script /opt/awx/conf.d
