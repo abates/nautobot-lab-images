@@ -15,7 +15,7 @@ COPY --from=quay.io/ansible/receptor:v1.2.3 /usr/bin/receptor /usr/bin/receptor
 ENV VIRTUAL_ENV="/var/lib/awx/venv/awx"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip3 install ansible && \
-    pip3 install --user https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz
+    pip3 install https://releases.ansible.com/ansible-tower/cli/ansible-tower-cli-latest.tar.gz
 
 RUN sed -i -e 's/^\[engine\]/default_sysctls = []\n\[engine\]/' /etc/containers/containers.conf
 RUN sed -i -e 's|^#mount_program|mount_program|g' -e '/additionalimage.*/a "/var/lib/shared",' -e 's|^mountopt[[:space:]]*=.*$|mountopt = "nodev,fsync=0"|g' /etc/containers/storage.conf
