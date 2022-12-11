@@ -26,7 +26,7 @@ function load_fixture() {
 
 for t in 1 10 30 30 30 30 ; do
   echo "Running post-up configuration"
-  if awx ping 2>&1 > /dev/null ; then
+  if awx ping > /dev/null 2>&1 ; then
     # Load any fixtures
     load_fixture /opt/awx/fixtures
 
