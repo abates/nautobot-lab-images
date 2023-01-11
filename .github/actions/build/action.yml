@@ -5,31 +5,10 @@ inputs:
     description: 'Base Directory of image to build'
     required: true
     type: string
-  version:
-    description: 'Version of the image to build'
-    required: true
-    type: string
   github_token:
     description: 'Github token for logging into container registry'
     required: true
     type: string
-  build_context:
-    description: 'top level directory to build from'
-    required: false
-    type: string
-  build_args:
-    description: 'Additional build args'
-    required: false
-    type: string
-    default: ""
-  labels:
-    description: "Docker image labels"
-    type: string
-    required: true
-  tags:
-    description: "Docker image tabs"
-    type: string
-    required: true
 runs:
   using: "composite"
 
@@ -45,11 +24,11 @@ runs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        context: ./${{ inputs.build_context || inputs.image }}
-        tags: ${{ inputs.tags }}
-        labels: ${{ inputs.labels }}
+        context: ./${{ env.BUILD_CONTEXT || inputs.image }}
+        tags: ${{ env.TAGS }}
+        labels: ${{ env.LABELS }}
         platforms: linux/arm64,linux/amd64
         build-args: |
-          VERSION=${{ inputs.version }}
-          ${{ inputs.build_args }}
+          VERSION=${{ env.VERSION }}
+          ${{ env.BUILD_ARGS }}
 

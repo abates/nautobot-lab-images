@@ -45,31 +45,11 @@ runs:
         echo "$(cat ${{ inputs.image }}/build_env.json)" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
-    - name: Set Image
-      shell: bash
-      run: echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
-
-    - name: Set Image Name
-      shell: bash
-      run: echo IMAGE_NAME=${{ fromJson(env.build_env).image_name }} >> $GITHUB_ENV
-
-    - name: Set Build Context
-      shell: bash
-      run: echo BUILD_CONTEXT=${{ fromJson(env.build_env).build_context }} >> $GITHUB_ENV
-
-    - name: Set Build Args
-      shell: bash
-      run: echo BUILD_ARGS=${{ fromJson(env.build_env).build_args }} >> $GITHUB_ENV
-
-    - name: Set Version
-      shell: bash
-      run: echo VERSION=${{ fromJson(env.build_env).version }} >> $GITHUB_ENV
-
     - name: Setup docker cache
       uses: actions/cache@v3
       with:
         path: /var/lib/docker
-        key: ${{ inputs.image }}-${{ steps.load_variables.outputs.data.version }}
+        key: ${{ inputs.image }}-${{ env.VERSION }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -92,6 +72,18 @@ runs:
         tags: |
           ${{ env.VERSION }}
           latest
+
+    - name: Set ENV Variables
+      shell: bash
+      run: |
+        echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
+        echo "IMAGE_NAME=${{ fromJson(env.build_env).image_name }}" >> $GITHUB_ENV
+        echo "BUILD_CONTEXT=${{ fromJson(env.build_env).build_context }}" >> $GITHUB_ENV
+        echo "BUILD_ARGS=${{ fromJson(env.build_env).build_args }}" >> $GITHUB_ENV
+        echo "VERSION=${{ fromJson(env.build_env).version }}" >> $GITHUB_ENV
+        echo "TAGS=${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
+        echo "LABELS=${{ steps.meta.outputs.labels }}" >> $GITHUB_ENV
+
 
     - id: action_file
       uses: andstor/file-existence-action@v2
