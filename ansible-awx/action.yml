@@ -17,7 +17,7 @@ runs:
       users: ./.github.com/actions/install-python
       with:
         image: ${{ inputs.image }}
-        python_version: ${{ fromJSON(env.build_env)["python_version"] }}
+        python_version: ${{ fromJSON(env.build_env).python_version }}
 
     - name: Checkout awx
       uses: actions/checkout@v3
