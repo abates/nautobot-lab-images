@@ -57,7 +57,7 @@ runs:
     - name: Setup docker cache
       uses: actions/cache@v3
       with:
-        path: /var/lib/docker
+        path: /var/lib/docker/overlay2
         key: ${{ inputs.image }}-${{ env.VERSION }}
 
     - name: Set up QEMU
@@ -91,7 +91,6 @@ runs:
         echo "LABELS<<EOF" >> $GITHUB_ENV
         echo "${{ steps.meta.outputs.labels}}" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
-
 
     - id: action_file
       uses: andstor/file-existence-action@v2

@@ -26,5 +26,3 @@ jobs:
         with:
           image: git_server
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tags: ${{ steps.prep.output.tags }}
-          labels: ${{ steps.prep.output.labels }}
