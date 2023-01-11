@@ -1,5 +1,5 @@
-name: Prepare
-description: prep the environment for building
+name: Build a Docker Image
+description: Build and publish the docker image
 inputs:
   image:
     description: 'Base Directory of image to build'
@@ -22,7 +22,14 @@ inputs:
     required: false
     type: string
     default: ""
-
+  labels:
+    description: "Docker image labels"
+    type: string
+    required: true
+  tags:
+    description: "Docker image tabs"
+    type: string
+    required: true
 runs:
   using: "composite"
 
@@ -39,8 +46,8 @@ runs:
       with:
         push: true
         context: ./${{ inputs.build_context || inputs.image }}
-        tags: ${{ steps.prep.outputs.tags }}
-        labels: ${{ steps.prep.outputs.labels }}
+        tags: ${{ inputs.tags }}
+        labels: ${{ inputs.labels }}
         platforms: linux/arm64,linux/amd64
         build-args: |
           VERSION=${{ inputs.version }}
