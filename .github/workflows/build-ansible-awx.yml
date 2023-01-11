@@ -20,7 +20,7 @@ jobs:
       - uses: ./.github/actions/prepare
         id: prep
         with:
-          image: ${{ inputs.image }}
+          image: ansible-awx
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: ./.github/actions/build
