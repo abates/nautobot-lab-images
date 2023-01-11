@@ -38,7 +38,7 @@ runs:
       run: |
         ansible-playbook -v tools/ansible/build.yml \
         -e awx_image=$IMAGE_NAME \
-        -e awx_version="$VERSION --cache-from type=gha,scope=ansible-awx-$VERSION --cache-to type=gha,scope=ansible-awx-$VERSION" \
+        -e awx_version=$VERSION \
         -e ansible_python_interpreter=$(which python3) \
         -e push=no \
         -e awx_official=yes

@@ -24,15 +24,15 @@ runs:
 
   # Steps represent a sequence of tasks that will be executed as part of the job
   steps:
-    - id: build_env
-      uses: andstor/file-existence-action@v2
-      with:
-        files: ./${{ inputs.image }}/build_env
-
     - uses: c-py/action-dotenv-to-setenv@v2
       with:
         env-file: ${{ inputs.image }}/build_env
-      if: steps.build_env.outputs.files_exists == 'true'
+
+    - name: Setup docker cache
+      users: actions/cache@v3
+      with:
+        path: /var/lib/docker
+        key: ${{ inputs.image }}-${{ env.VERSION }}
 
     - name: Install python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v4
