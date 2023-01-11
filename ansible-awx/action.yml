@@ -10,14 +10,6 @@ inputs:
     required: true
     type: string
 
-outputs:
-  tags:
-    description: "Container tags for pushing to registry"
-    value: ${{ steps.meta.outputs.tags }}
-  labels:
-    description: "Container labels for pushing to registry"
-    value: ${{ steps.meta.outputs.labels }}
-
 runs:
   using: "composite"
 
@@ -27,7 +19,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: ansible/awx
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.github_token }}
         ref: ${{ env.VERSION }}
         path: ansible-awx-build
 
@@ -35,13 +27,14 @@ runs:
       uses: actions/checkout@v2
       with:
         repository: ansible/awx-logos
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.github_token }}
         path: awx-logos
 
     - name: Build AWX
       working-directory: ansible-awx-build
       env:
         ANSIBLE_STDOUT_CALLBACK: debug
+      shell: bash
       run: |
         ansible-playbook -v tools/ansible/build.yml \
         -e awx_image=$IMAGE_NAME \
