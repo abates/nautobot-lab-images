@@ -85,7 +85,9 @@ runs:
     - name: Set Docker Variables
       shell: bash
       run: |
-        echo "TAGS=${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
+        echo "TAGS<<EOF" >> $GITHUB_ENV
+        echo "${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
         echo "LABELS<<EOF" >> $GITHUB_ENV
         echo "${{ steps.meta.outputs.labels}}" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
