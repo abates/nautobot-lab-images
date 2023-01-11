@@ -29,7 +29,7 @@ runs:
         env-file: ${{ inputs.image }}/build_env
 
     - name: Setup docker cache
-      users: actions/cache@v3
+      uses: actions/cache@v3
       with:
         path: /var/lib/docker
         key: ${{ inputs.image }}-${{ env.VERSION }}
