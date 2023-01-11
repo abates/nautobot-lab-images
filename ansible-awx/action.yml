@@ -1,0 +1,51 @@
+name: Prepare the Ansible AWX build
+description: prep the environment for building
+inputs:
+  image:
+    description: 'Base Directory of image to build'
+    required: true
+    type: string
+  github_token:
+    description: 'Github token for logging into container registry'
+    required: true
+    type: string
+
+outputs:
+  tags:
+    description: "Container tags for pushing to registry"
+    value: ${{ steps.meta.outputs.tags }}
+  labels:
+    description: "Container labels for pushing to registry"
+    value: ${{ steps.meta.outputs.labels }}
+
+runs:
+  using: "composite"
+
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - name: Checkout awx
+      uses: actions/checkout@v3
+      with:
+        repository: ansible/awx
+        token: ${{ secrets.GITHUB_TOKEN }}
+        ref: ${{ env.VERSION }}
+        path: ansible-awx-build
+
+    - name: Checkout awx-logos
+      uses: actions/checkout@v2
+      with:
+        repository: ansible/awx-logos
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: awx-logos
+
+    - name: Build AWX
+      working-directory: ansible-awx-build
+      env:
+        ANSIBLE_STDOUT_CALLBACK: debug
+      run: |
+        ansible-playbook -v tools/ansible/build.yml \
+        -e awx_image=$IMAGE_NAME \
+        -e awx_version=$VERSION \
+        -e ansible_python_interpreter=$(which python3) \
+        -e push=no \
+        -e awx_official=yes

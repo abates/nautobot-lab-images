@@ -9,7 +9,11 @@ inputs:
     description: 'Github token for logging into container registry'
     required: true
     type: string
-
+  build_args:
+    description: 'Additional build args'
+    required: false
+    type: string
+    default: ""
 runs:
   using: "composite"
 
@@ -37,4 +41,5 @@ runs:
         platforms: linux/arm64,linux/amd64
         build-args: |
           VERSION=${{ env.VERSION }}
+          ${{ inputs.build_args }}
 

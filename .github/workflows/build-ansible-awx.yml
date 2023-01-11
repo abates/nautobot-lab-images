@@ -17,48 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/prepare
+      - uses: ./.github/actions/build
         id: prep
         with:
           image: ansible-awx
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout awx
-        uses: actions/checkout@v3
-        with:
-          repository: ansible/awx
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ env.VERSION }}
-          path: ansible-awx-build
-
-      - name: Checkout awx-logos
-        uses: actions/checkout@v2
-        with:
-          repository: ansible/awx-logos
-          token: ${{ secrets.GITHUB_TOKEN }}
-          path: awx-logos
-
-      - name: Build AWX
-        working-directory: ansible-awx-build
-        env:
-          ANSIBLE_STDOUT_CALLBACK: debug
-        run: |
-          ansible-playbook -v tools/ansible/build.yml \
-          -e awx_image=$IMAGE_NAME \
-          -e awx_version=$VERSION \
-          -e ansible_python_interpreter=$(which python3) \
-          -e push=no \
-          -e awx_official=yes
-
-      - name: Build and publish image
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          context: ./${{ env.BUILD_CONTEXT || inputs.image }}
-          tags: ${{ steps.prep.outputs.tags }}
-          labels: ${{ steps.prep.outputs.labels }}
-          platforms: linux/arm64,linux/amd64
-          build-args: |
-            VERSION=${{ env.VERSION }}
+          build_args: |
             SETUPTOOLS_SCM_PRETEND_VERSION=${{ env.VERSION }}
             HEADLESS=False
+
