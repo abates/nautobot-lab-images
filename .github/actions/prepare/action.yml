@@ -86,3 +86,18 @@ runs:
           ${{ env.VERSION }}
           latest
 
+    - id: action_file
+      uses: andstor/file-existence-action@v2
+      with:
+        files: ./${{ inputs.image }}/action.yml
+
+    - name: "Copy image action"
+      shell: bash
+      run: cp ./${{ inputs.image }}/action.yml ./.github/actions/pre_build/action.yml
+      if: steps.action_file.outputs.files_exists == 'true'
+
+    - name: "Copy noop action"
+      shell: bash
+      run: cp ./.github/actions/noop/action.yml ./.github/actions/pre_build/action.yml
+      if: steps.action_file.outputs.files_exists == 'false'
+

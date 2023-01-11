@@ -1,0 +1,11 @@
+name: NoOp
+description: Do Nothing
+
+runs:
+  using: "composite"
+
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - name: noop
+      shell: bash
+      run: echo 

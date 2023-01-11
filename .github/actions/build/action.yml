@@ -21,6 +21,12 @@ runs:
         image: ${{ inputs.image }}
         github_token: ${{ inputs.github_token }}
 
+    - name: Pre-Build actions
+      uses: ./.github/actions/pre_build
+      with:
+        image: ${{ inputs.image }}
+        github_token: ${{ inputs.github_token }}
+
     - name: Build and publish image
       uses: docker/build-push-action@v3
       with:
