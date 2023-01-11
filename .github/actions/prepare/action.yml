@@ -45,6 +45,15 @@ runs:
         echo "$(cat ${{ inputs.image }}/build_env.json)" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
 
+    - name: Set Main Variables
+      shell: bash
+      run: |
+        echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
+        echo "IMAGE_NAME=${{ fromJson(env.build_env).image_name }}" >> $GITHUB_ENV
+        echo "BUILD_CONTEXT=${{ fromJson(env.build_env).build_context }}" >> $GITHUB_ENV
+        echo "BUILD_ARGS=${{ fromJson(env.build_env).build_args }}" >> $GITHUB_ENV
+        echo "VERSION=${{ fromJson(env.build_env).version }}" >> $GITHUB_ENV
+
     - name: Setup docker cache
       uses: actions/cache@v3
       with:
@@ -73,16 +82,13 @@ runs:
           ${{ env.VERSION }}
           latest
 
-    - name: Set ENV Variables
+    - name: Set Docker Variables
       shell: bash
       run: |
-        echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
-        echo "IMAGE_NAME=${{ fromJson(env.build_env).image_name }}" >> $GITHUB_ENV
-        echo "BUILD_CONTEXT=${{ fromJson(env.build_env).build_context }}" >> $GITHUB_ENV
-        echo "BUILD_ARGS=${{ fromJson(env.build_env).build_args }}" >> $GITHUB_ENV
-        echo "VERSION=${{ fromJson(env.build_env).version }}" >> $GITHUB_ENV
         echo "TAGS=${{ steps.meta.outputs.tags }}" >> $GITHUB_ENV
-        echo "LABELS=${{ steps.meta.outputs.labels }}" >> $GITHUB_ENV
+        echo "LABELS<<EOF" >> $GITHUB_ENV
+        echo "${{ steps.meta.outputs.labels}}" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
 
     - id: action_file
