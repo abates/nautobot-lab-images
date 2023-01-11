@@ -1,0 +1,32 @@
+---
+name: Build Lab Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        type: choice
+        description: Image to build
+        options: 
+        - ansible-awx
+        - ansible-awx-ee
+        - awx
+        - git_server
+jobs:
+  build_git_server:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/prepare
+        id: prep
+        with:
+          image: ${{ inputs.image }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/build
+        with:
+          image: ${{ inputs.image }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
