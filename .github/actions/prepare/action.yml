@@ -40,7 +40,10 @@ runs:
   steps:
     - name: Read configuration
       shell: bash
-      run: echo "build_env=${cat ${{ inputs.image }}/build_env.json}" >> $GITHUB_ENV
+      run: |
+        echo build_env=<<EOF >> $GITHUB_ENV
+        echo $(cat ${{ inputs.image }}/build_env.json) >> $GITHUB_ENV
+        echo EOF >> $GITHUB_ENV
 
     - name: Set Image
       shell: bash
