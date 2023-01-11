@@ -1,0 +1,6 @@
+{
+  "version": "21.9.0",
+  "image_name": "ansible-awx",
+  "python_version": "3.9",
+  "build_context": "ansible-awx-build"
+}

@@ -9,12 +9,16 @@ inputs:
     description: 'Github token for logging into container registry'
     required: true
     type: string
-
 runs:
   using: "composite"
 
-  # Steps represent a sequence of tasks that will be executed as part of the job
   steps:
+    - name: Install Python
+      users: ./.github.com/actions/install-python
+      with:
+        image: ${{ inputs.image }}
+        python_version: ${{ fromJSON(env.build_env)["python_version"] }}
+
     - name: Checkout awx
       uses: actions/checkout@v3
       with:

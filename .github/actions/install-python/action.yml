@@ -1,0 +1,33 @@
+name: Install Python
+description: Install Python into the build environment
+inputs:
+  image:
+    description: 'Base Directory of image to build'
+    required: true
+  github_token:
+    description: 'Github token for logging into container registry'
+    required: true
+  python_version:
+    description: 'Version of python to install'
+    required: true
+
+runs:
+  using: "composite"
+
+  # Steps represent a sequence of tasks that will be executed as part of the job
+  steps:
+    - name: Install python ${{ inputs.python_version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python_version }}
+    
+    - id: requirements_txt
+      uses: andstor/file-existence-action@v2
+      with:
+        files: ./${{ inputs.image }}/requirements.txt
+
+    - name: Install python requirements
+      shell: bash
+      run: pip install -r ./${{ inputs.image }}/requirements.txt
+      if: steps.requirements_txt.outputs.files_exists == 'true'
+

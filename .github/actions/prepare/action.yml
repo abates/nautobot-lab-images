@@ -17,55 +17,59 @@ outputs:
   labels:
     description: "Container labels for pushing to registry"
     value: ${{ steps.meta.outputs.labels }}
-
+  build_env:
+    description: "Content of the build_env.json file"
+    value: ${{ env.build_env }}
+  image_name:
+    description: "Image name for the newly build image"
+    value: ${{ env.IMAGE_NAME }}
+  build_context:
+    description: "Build context for the docker build"
+    value: ${{ env.BUILD_CONTEXT || "" }}
+  build_args:
+    description: "Additional build args"
+    value: ${{ env.BUILD_ARGS || "" }}
+  version:
+    description: "Version of the image being built"
+    value: ${{ env.VERSION }}
 
 runs:
   using: "composite"
 
   # Steps represent a sequence of tasks that will be executed as part of the job
   steps:
-    - uses: c-py/action-dotenv-to-setenv@v2
-      with:
-        env-file: ${{ inputs.image }}/build_env
+    - name: Read configuration
+      shell: bash
+      run: echo "build_env=$(cat ${{ inputs.image }}/build_env.json)" >> $GITHUB_ENV
+
+    - name: Set Image
+      shell: bash
+      run: echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
+
+    - name: Set Image Name
+      shell: bash
+      run: echo "IMAGE_NAME=${{ fromJson(env.build_env)[\"image_name\"] }}" >> $GITHUB_ENV
+
+    - name: Set Build Context
+      shell: bash
+      run: echo "BUILD_CONTEXT=${{ fromJson(env.build_env)[\"build_context\"] }}" >> $GITHUB_ENV
+
+    - name: Set Build Args
+      shell: bash
+      run: echo "BUILD_ARGS=${{ fromJson(env.build_env)[\"build_args\"] }}" >> $GITHUB_ENV
+
+    - name: Set Version
+      shell: bash
+      run: echo "VERSION=${{ fromJson(env.build_env)[\"version\"] }}" >> $GITHUB_ENV
 
     - name: Setup docker cache
       uses: actions/cache@v3
       with:
         path: /var/lib/docker
-        key: ${{ inputs.image }}-${{ env.VERSION }}
-
-    - name: Install python ${{ env.PYTHON_VERSION }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-      if: ${{ env.PYTHON_VERSION }} != ""
-    
-    - id: requirements_txt
-      uses: andstor/file-existence-action@v2
-      with:
-        files: ./${{ inputs.image }}/requirements.txt
-
-    - name: Install python requirements
-      shell: bash
-      run: pip install -r ./${{ inputs.image }}/requirements.txt
-      if: steps.requirements_txt.outputs.files_exists == 'true'
-
-    - id: pre_build
-      uses: andstor/file-existence-action@v2
-      with:
-        files: ./${{ inputs.image }}/pre_build.sh
-
-    - name: Run pre-build script
-      shell: bash
-      run: ./${{ inputs.image }}/pre_build.sh
-      if: steps.pre_build.outputs.files_exists == 'true'
+        key: ${{ inputs.image }}-${{ steps.load_variables.outputs.data.version }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
-
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      # Ignore the failure of a step and avoid terminating the job.
-      continue-on-error: true
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2

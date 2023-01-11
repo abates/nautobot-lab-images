@@ -1,0 +1,6 @@
+{
+  "version": "21.9.0",
+  "image_name": "nautobot-labs-awx",
+  "python_version": "3.9",
+  "awx_image": "local/awx"
+}

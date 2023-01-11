@@ -17,8 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ./.github/actions/build
+      - uses: ./.github/actions/prepare
         id: prep
+        with:
+          image: ${{ inputs.image }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/build
         with:
           image: ansible-awx
           github_token: ${{ secrets.GITHUB_TOKEN }}
