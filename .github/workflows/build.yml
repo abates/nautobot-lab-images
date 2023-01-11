@@ -13,7 +13,7 @@ on:
         - awx
         - git_server
 jobs:
-  build_git_server:
+  build:
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job

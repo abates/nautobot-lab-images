@@ -14,7 +14,7 @@ runs:
 
   steps:
     - name: Install Python
-      users: ./.github.com/actions/install-python
+      uses: ./.github.com/actions/install-python
       with:
         image: ${{ inputs.image }}
         python_version: ${{ fromJSON(env.build_env).python_version }}
