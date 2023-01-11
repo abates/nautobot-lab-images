@@ -54,10 +54,6 @@ runs:
         echo "BUILD_ARGS=${{ fromJson(env.build_env).build_args }}" >> $GITHUB_ENV
         echo "VERSION=${{ fromJson(env.build_env).version }}" >> $GITHUB_ENV
 
-      uses: actions/cache@v3
-      with:
-        path: /var/lib/docker/overlay2
-
     - name: Setup docker cache
       uses: satackey/action-docker-layer-caching@v0.0.11
       with:
