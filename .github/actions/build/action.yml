@@ -25,6 +25,8 @@ runs:
       with:
         push: true
         context: ./${{ env.BUILD_CONTEXT || inputs.image }}
+        cache-from: "type=gha,scope=docker-buildx-${{ inputs.image }}-${{ env.VERSION }}"
+        cache-to: "type=gha,scope=docker-buildx-${{ inputs.image }}-${{ env.VERSION }}"
         tags: ${{ env.TAGS }}
         labels: ${{ env.LABELS }}
         platforms: linux/arm64,linux/amd64

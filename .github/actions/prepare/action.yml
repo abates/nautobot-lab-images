@@ -54,11 +54,16 @@ runs:
         echo "BUILD_ARGS=${{ fromJson(env.build_env).build_args }}" >> $GITHUB_ENV
         echo "VERSION=${{ fromJson(env.build_env).version }}" >> $GITHUB_ENV
 
-    - name: Setup docker cache
       uses: actions/cache@v3
       with:
         path: /var/lib/docker/overlay2
-        key: ${{ inputs.image }}-${{ env.VERSION }}
+
+    - name: Setup docker cache
+      uses: satackey/action-docker-layer-caching@v0.0.11
+      with:
+        key: docker-build-${{ inputs.image }}-${{ env.VERSION }}-{hash}
+        restore-keys: |
+          docker-build-${{ inputs.image }}-${{ env.VERSION }}-
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
