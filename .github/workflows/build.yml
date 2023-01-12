@@ -34,9 +34,9 @@ jobs:
       - name: "Determine images to build from input"
         shell: bash
         run: |
-          #echo "build_images<<EOF" >> $GITHUB_ENV
+          echo "build_images<<EOF" >> $GITHUB_ENV
           echo "build_images=$(${{ inputs.image }}" | jq -R | jq --slurp -M) >> $GITHUB_ENV
-          #echo "EOF" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         if: github.event.inputs.image != ''
 
   build:
@@ -44,7 +44,8 @@ jobs:
     needs: images
     strategy:
       fail-fast: true
-      matrix: ${{fromJson(needs.images.outputs.images)}}
+      matrix: 
+        image: ${{fromJson(needs.images.outputs.images)}}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
