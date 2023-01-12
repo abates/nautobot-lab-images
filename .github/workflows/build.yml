@@ -29,7 +29,7 @@ jobs:
             echo $p | awk -F/ '{print $1}' ; 
           done | grep -vP '\.github' | sort | uniq | jq -R | jq --slurp -M >> $GITHUB_ENV
           echo EOF >> $GITHUB_ENV
-        if: github.event.inputs.image == ""
+        if: github.event.inputs.image == ''
 
       - name: "Determine images to build from input"
         shell: bash
@@ -37,7 +37,7 @@ jobs:
           echo build_images<<EOF >> $GITHUB_ENV
           echo ${{ inputs.image }} | jq -R | jq --slurp -M >> $GITHUB_ENV
           echo EOF >> $GITHUB_ENV
-        if: github.event.inputs.image != ""
+        if: github.event.inputs.image != ''
 
   build:
     runs-on: ubuntu-latest
