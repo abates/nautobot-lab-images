@@ -1,6 +1,6 @@
 ---
 name: Build Lab Images
-
+run-name: Build/Publish ${{ inputs.image }} by @${{ github.actor }}
 on:
   workflow_dispatch:
     inputs:
