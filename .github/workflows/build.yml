@@ -24,19 +24,19 @@ jobs:
       - name: "Determine images to build from Git"
         shell: bash
         run: |
-          echo build_images<<EOF >> $GITHUB_ENV
+          echo "build_images<<EOF" >> $GITHUB_ENV
           git diff --name-only HEAD~50 | while read p ; do 
             echo $p | awk -F/ '{print $1}' ; 
           done | grep -vP '\.github' | sort | uniq | jq -R | jq --slurp -M >> $GITHUB_ENV
-          echo EOF >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         if: github.event.inputs.image == ''
 
       - name: "Determine images to build from input"
         shell: bash
         run: |
-          echo build_images<<EOF >> $GITHUB_ENV
-          echo ${{ inputs.image }} | jq -R | jq --slurp -M >> $GITHUB_ENV
-          echo EOF >> $GITHUB_ENV
+          echo "build_images<<EOF" >> $GITHUB_ENV
+          echo "${{ inputs.image }}" | jq -R | jq --slurp -M >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
         if: github.event.inputs.image != ''
 
   build:
