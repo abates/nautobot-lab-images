@@ -2,6 +2,10 @@
 name: Build Lab Images
 run-name: Build/Publish ${{ inputs.image }} by @${{ github.actor }}
 on:
+  on:
+    push:
+      branches:
+        - "main"
   workflow_dispatch:
     inputs:
       image:
@@ -42,6 +46,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     needs: images
+    if: ${{ needs.images.outputs.images != '[]' }}
     strategy:
       fail-fast: true
       matrix: 
