@@ -10,11 +10,11 @@ on:
       image:
         type: choice
         description: Image to build
-        options: 
-        - ansible-awx
-        - ansible-awx-ee
-        - awx
-        - git_server
+        options:
+          - ansible-awx
+          - ansible-awx-ee
+          - awx
+          - git_server
 jobs:
   images:
     runs-on: ubuntu-latest
@@ -28,9 +28,9 @@ jobs:
         shell: bash
         run: |
           echo "build_images<<EOF" >> $GITHUB_ENV
-          git diff --name-only HEAD~1 | while read p ; do 
-            echo $p | awk -F/ '{print $1}' ; 
-          done | grep -vP '\.github' | sort | uniq | jq -R | jq --slurp -M -c >> $GITHUB_ENV
+          git diff --name-only HEAD~1 | while read p ; do
+            echo $p | awk -F/ '{print $1}' ;
+          done | grep -vP '\.github' | sort | uniq | jq -R | jq -s -M -c >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
         if: github.event.inputs.image == ''
 
@@ -43,7 +43,7 @@ jobs:
         if: github.event.inputs.image != ''
 
       - shell: bash
-        run: echo "Will build the following images: $build_images"
+        run: "echo 'Will build the following images: $build_images'"
 
   build:
     runs-on: ubuntu-latest
@@ -51,10 +51,9 @@ jobs:
     if: ${{ needs.images.outputs.images != '[]' }}
     strategy:
       fail-fast: true
-      matrix: 
+      matrix:
         image: ${{fromJson(needs.images.outputs.images)}}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
 
