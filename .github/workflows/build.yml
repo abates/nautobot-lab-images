@@ -2,10 +2,9 @@
 name: Build Lab Images
 run-name: Build/Publish ${{ inputs.image }} by @${{ github.actor }}
 on:
-  on:
-    push:
-      branches:
-        - "main"
+  push:
+    branches:
+      - "main"
   workflow_dispatch:
     inputs:
       image:
