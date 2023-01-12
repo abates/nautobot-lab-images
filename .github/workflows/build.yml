@@ -13,8 +13,38 @@ on:
         - awx
         - git_server
 jobs:
+  images:
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ env.build_images }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Determine images to build from Git"
+        shell: bash
+        run: |
+          echo build_images<<EOF >> $GITHUB_ENV
+          git diff --name-only HEAD~50 | while read p ; do 
+            echo $p | awk -F/ '{print $1}' ; 
+          done | grep -vP '\.github' | sort | uniq | jq -R | jq --slurp -M >> $GITHUB_ENV
+          echo EOF >> $GITHUB_ENV
+        if: inputs.image == ""
+
+      - name: "Determine images to build from input"
+        shell: bash
+        run: |
+          echo build_images<<EOF >> $GITHUB_ENV
+          echo ${{ inputs.image }} | jq -R | jq --slurp -M >> $GITHUB_ENV
+          echo EOF >> $GITHUB_ENV
+        if: inputs.image != ""
+
   build:
     runs-on: ubuntu-latest
+    needs: images
+    strategy:
+      fail-fast: true
+      matrix: ${{fromJson(needs.images.outputs.images)}}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -23,10 +53,10 @@ jobs:
       - uses: ./.github/actions/prepare
         id: prep
         with:
-          image: ${{ inputs.image }}
+          image: ${{ matrix.image }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: ./.github/actions/build
         with:
-          image: ${{ inputs.image }}
+          image: ${{ matrix.image }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
