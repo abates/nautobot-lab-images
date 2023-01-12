@@ -23,6 +23,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        fetch-depth: 2
 
       - name: "Determine images to build from Git"
         shell: bash
