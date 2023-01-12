@@ -17,7 +17,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: ansible/awx-ee
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.github_token }}
         ref: ${{ env.VERSION }}
         path: ansible-awx-ee-build
 
