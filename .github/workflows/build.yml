@@ -46,7 +46,7 @@ jobs:
         if: github.event.inputs.image != ''
 
       - shell: bash
-        run: "echo 'Will build the following images: $build_images'"
+        run: "echo Will build the following images: $build_images"
 
   build:
     runs-on: ubuntu-latest
