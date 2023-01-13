@@ -36,7 +36,7 @@ jobs:
 
       - name: "Produce uniq list of image directories"
         shell: bash
-        run: "grep -vP '\.github' /tmp/changed_files | sort | uniq > /tmp/uniq_files"
+        run: "grep -vP '\\.github' /tmp/changed_files | sort | uniq > /tmp/uniq_files"
         if: github.event.inputs.image == ''
 
       - name: "Convert list to json"
