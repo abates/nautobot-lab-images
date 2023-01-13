@@ -26,15 +26,30 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: "Determine images to build from Git"
+      - name: "Determine image directories changed in the last commit"
+        shell: bash
+        run: |
+          git diff --name-only HEAD~1 | while read p ; do
+            echo $p | awk -F/ '{print $1}' ;
+          done > /tmp/changed_files
+        if: github.event.inputs.image == ''
+
+      - name: "Produce uniq list of image directories"
+        shell: bash
+        run: "grep -vP '\.github' /tmp/changed_files | sort | uniq > /tmp/uniq_files"
+        if: github.event.inputs.image == ''
+
+      - name: "Convert list to json"
+        shell: bash
+        run: "cat /tmp/uniq_files | jq -R | jq -s -M -c > /tmp/uniq_files.json"
+        if: github.event.inputs.image == ''
+
+      - name: "Save to environment"
         shell: bash
         run: |
           echo "build_images<<EOF" >> $GITHUB_ENV
-          git diff --name-only HEAD~1 | while read p ; do
-            echo $p | awk -F/ '{print $1}' ;
-          done | grep -vP '\.github' | sort | uniq | jq -R | jq -s -M -c >> $GITHUB_ENV
+          cat /tmp/uniq_files.json >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          cat $GITHUB_ENV
         if: github.event.inputs.image == ''
 
       - name: "Determine images to build from input"
