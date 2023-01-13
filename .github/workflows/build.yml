@@ -66,6 +66,25 @@ jobs:
           image: ${{ matrix.image }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Pre-Build actions
+        uses: ./.github/actions/pre_build
+        with:
+          image: ${{ matrix.image }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          context: ./${{ env.BUILD_CONTEXT || matrix.image }}
+          cache-from: "type=gha,scope=docker-buildx-${{ matrix.image }}-${{ env.VERSION }}"
+          cache-to: "type=gha,scope=docker-buildx-${{ matrix.image }}-${{ env.VERSION }}"
+          tags: ${{ env.TAGS }}
+          labels: ${{ env.LABELS }}
+          platforms: linux/arm64,linux/amd64
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            ${{ env.BUILD_ARGS }}
       - uses: ./.github/actions/build
         with:
           image: ${{ matrix.image }}
