@@ -14,6 +14,7 @@ on:
           - ansible-awx
           - ansible-awx-ee
           - awx
+          - containerlab
           - git_server
 jobs:
   images:
