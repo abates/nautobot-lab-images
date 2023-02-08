@@ -132,8 +132,18 @@ jobs:
           image: ${{ matrix.image }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check for published image
+        shell: bash
+        run: |
+          if docker manifest inspect ghcr.io/${{ github.actor }}/${{ env.IMAGE_NAME}:${{ env.VERSION }}  > /dev/null 2>&1 ; then 
+            echo "IMAGE_EXISTS=0" >> $GITHUB_ENV
+          else
+            echo "IMAGE_EXISTS=1" >> $GITHUB_ENV
+          fi
+
       - name: Build and publish image
         uses: docker/build-push-action@v3
+        if: ${{ env.IMAGE_EXISTS == 0 }}
         with:
           push: true
           context: ./${{ env.BUILD_CONTEXT || matrix.image }}
