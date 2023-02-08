@@ -147,7 +147,7 @@ jobs:
       - name: Build and publish image
         uses: docker/build-push-action@v3
         with:
-          push: ${{ env.IMAGE_EXISTS == "0" }}
+          push: ${{ env.IMAGE_EXISTS == '0' }}
           context: ./${{ env.BUILD_CONTEXT || matrix.image }}
           cache-from: "type=gha,scope=docker-buildx-${{ matrix.image }}-${{ env.VERSION }}"
           cache-to: "type=gha,scope=docker-buildx-${{ matrix.image }}-${{ env.VERSION }}"
