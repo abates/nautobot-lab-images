@@ -5,6 +5,7 @@ USER root
 RUN yum -y update && \
     yum install -y procps && \
     dnf install -y podman && \
+    dnf install -y rsyslog-8.2102.0-106.el9 && \
     rpm --restore shadow-utils
 
 ADD --chown=501 https://raw.githubusercontent.com/containers/libpod/master/contrib/podmanimage/stable/containers.conf /etc/containers/containers.conf
